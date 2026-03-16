@@ -10,11 +10,11 @@ export default function Builder() {
   };
 
   return (
-    <s-page heading="Build Your Own Bundle">
-      {/* Step 1: Basket Selection */}
-      <s-section heading="Step 1: Select Your Basket Size">
+    <s-page heading="Bundle Builder - Admin Settings">
+      <s-section heading="Step 1: Configure Basket Types">
         <s-paragraph>
-          Choose the size of bundle you want to create:
+          Ye **admin settings** hai - yahan aap define karenge ke customer ko 
+          kaun se basket options dikhenge (Small/Large/XL) aur unki kya limits hain.
         </s-paragraph>
         
         <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
@@ -31,8 +31,8 @@ export default function Builder() {
             }}
           >
             <h3>Small Basket</h3>
-            <p>1-3 products</p>
-            <p><strong>$29.99</strong></p>
+            <p>Min: 1, Max: 3 products</p>
+            <p><strong>Base Price: $29.99</strong></p>
           </div>
 
           {/* Large Basket */}
@@ -48,8 +48,8 @@ export default function Builder() {
             }}
           >
             <h3>Large Basket</h3>
-            <p>4-6 products</p>
-            <p><strong>$49.99</strong></p>
+            <p>Min: 4, Max: 6 products</p>
+            <p><strong>Base Price: $49.99</strong></p>
           </div>
 
           {/* Extra Large Basket */}
@@ -65,15 +65,16 @@ export default function Builder() {
             }}
           >
             <h3>Extra Large Basket</h3>
-            <p>7-10 products</p>
-            <p><strong>$79.99</strong></p>
+            <p>Min: 7, Max: 10 products</p>
+            <p><strong>Base Price: $79.99</strong></p>
           </div>
         </div>
 
         {selectedBasket && (
           <s-paragraph>
             <br />
-            ✅ You selected: <strong>{selectedBasket} Basket</strong>
+            ✅ Selected configuration: <strong>{selectedBasket}</strong> - 
+            Yeh setting save hogi aur customer ko storefront par yahi options dikhenge.
           </s-paragraph>
         )}
       </s-section>
