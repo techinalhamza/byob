@@ -1,0 +1,648 @@
+<!-- BYOB - Bundle Builder Block -->
+<div class="byob-bundle-builder">
+  <div class="byob-header">
+    <h2>Build Your Own Bundle</h2>
+    <p>Create your custom bundle in 3 easy steps!</p>
+  </div>
+
+  <!-- Step 1: Basket Selection -->
+<!-- Step 1: Basket Selection -->
+<div class="byob-step byob-step-1" data-step="1">
+  <div class="step-header">
+    <span class="step-number">1</span>
+    <h3>Select Basket Size</h3>
+  </div>
+  <div class="step-content">
+    <p>Choose your basket type:</p>
+    <div class="basket-options">
+      <!-- Small Basket -->
+      <div class="basket-option" 
+           data-basket="small"
+           data-min="{{ block.settings.small_basket_min }}"
+           data-max="{{ block.settings.small_basket_max }}"
+           data-price="{{ block.settings.small_basket_price }}">
+        <h4>{{ block.settings.small_basket_name }}</h4>
+        <p>{{ block.settings.small_basket_min }}-{{ block.settings.small_basket_max }} items</p>
+        <p class="price">${{ block.settings.small_basket_price }}</p>
+      </div>
+      
+      <!-- Large Basket -->
+      <div class="basket-option" 
+           data-basket="large"
+           data-min="{{ block.settings.large_basket_min }}"
+           data-max="{{ block.settings.large_basket_max }}"
+           data-price="{{ block.settings.large_basket_price }}">
+        <h4>{{ block.settings.large_basket_name }}</h4>
+        <p>{{ block.settings.large_basket_min }}-{{ block.settings.large_basket_max }} items</p>
+        <p class="price">${{ block.settings.large_basket_price }}</p>
+      </div>
+      
+      <!-- Extra Large Basket -->
+      <div class="basket-option" 
+           data-basket="extra-large"
+           data-min="{{ block.settings.extra_large_basket_min }}"
+           data-max="{{ block.settings.extra_large_basket_max }}"
+           data-price="{{ block.settings.extra_large_basket_price }}">
+        <h4>{{ block.settings.extra_large_basket_name }}</h4>
+        <p>{{ block.settings.extra_large_basket_min }}-{{ block.settings.extra_large_basket_max }} items</p>
+        <p class="price">${{ block.settings.extra_large_basket_price }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <!-- Step 2: Product Selection (Hidden by default) -->
+  <div class="byob-step byob-step-2" data-step="2" style="display: none;">
+    <div class="step-header">
+      <span class="step-number">2</span>
+      <h3>Add Products</h3>
+    </div>
+    <div class="step-content">
+      <p>Selected: <span class="selected-count">0</span> items</p>
+      <div class="products-grid">
+        <!-- Products will be loaded here -->
+        <p>Loading products...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 3: Preview (Hidden by default) -->
+  <div class="byob-step byob-step-3" data-step="3" style="display: none;">
+    <div class="step-header">
+      <span class="step-number">3</span>
+      <h3>Preview & Checkout</h3>
+    </div>
+    <div class="step-content">
+      <div class="preview-section">
+        <h4>Your Bundle</h4>
+        <div class="selected-items"></div>
+        <div class="total-price">
+          <strong>Total: $<span class="total-amount">0.00</span></strong>
+        </div>
+      </div>
+      <div class="note-section">
+        <label for="bundle-note">Add a note (optional):</label>
+        <textarea id="bundle-note" rows="3" placeholder="e.g., Happy Birthday!"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation Buttons -->
+  <div class="byob-footer">
+    <button class="byob-prev" style="display: none;">Previous</button>
+    <button class="byob-next">Next</button>
+    <button class="byob-add-to-cart" style="display: none;">Add to Cart</button>
+  </div>
+</div>
+
+<!-- CSS Styling -->
+<style>
+.byob-bundle-builder {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.byob-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.byob-header h2 {
+  font-size: 28px;
+  color: {{ block.settings.text_color }};
+  margin-bottom: 10px;
+}
+
+.byob-step {
+  background: #f6f6f7;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.step-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.step-number {
+  width: 40px;
+  height: 40px;
+  background: {{ block.settings.primary_color }};
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.basket-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.basket-option {
+  background: white;
+  border: 2px solid #e1e3e5;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.basket-option:hover {
+  border-color: {{ block.settings.primary_color }};
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.basket-option.selected {
+  border-color: {{ block.settings.primary_color }};
+  background: {{ block.settings.primary_color | color_modify: 'alpha', 0.1 }};
+}
+
+.basket-option h4 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: {{ block.settings.text_color }};
+}
+
+.basket-option .price {
+  font-size: 24px;
+  font-weight: bold;
+  color: {{ block.settings.primary_color }};
+  margin-top: 10px;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.byob-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+}
+
+.byob-footer button {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.byob-prev {
+  background: #f1f1f1;
+  color: {{ block.settings.text_color }};
+}
+
+.byob-next, .byob-add-to-cart {
+  background: {{ block.settings.primary_color }};
+  color: white;
+}
+
+.byob-footer button:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.byob-footer button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.selected-items {
+  background: white;
+  border-radius: 8px;
+  padding: 15px;
+  margin: 15px 0;
+}
+
+.note-section {
+  margin-top: 20px;
+}
+
+.note-section label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: {{ block.settings.text_color }};
+}
+
+.note-section textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #e1e3e5;
+  border-radius: 4px;
+  font-family: inherit;
+}
+
+.total-price {
+  font-size: 20px;
+  text-align: right;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 2px solid #e1e3e5;
+  color: {{ block.settings.text_color }};
+}
+</style>
+<!-- JavaScript (abhi basic navigation ke liye) -->
+<!-- JavaScript -->
+<!-- JavaScript -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const steps = document.querySelectorAll('.byob-step');
+  const prevBtn = document.querySelector('.byob-prev');
+  const nextBtn = document.querySelector('.byob-next');
+  const addToCartBtn = document.querySelector('.byob-add-to-cart');
+  
+  let currentStep = 1;
+  let selectedBasket = null;
+  let selectedProducts = [];
+  let allProducts = []; // Yahan saare products store honge
+  
+  // 🔄 Step 3.1: Products fetch karo Shopify se
+  async function fetchProducts() {
+    const productsGrid = document.querySelector('.products-grid');
+    productsGrid.innerHTML = '<p>Loading products...</p>';
+    
+    try {
+      // Shopify AJAX API se products fetch karo
+      const response = await fetch('/products.json?limit=12');
+      const data = await response.json();
+      
+      allProducts = data.products;
+      
+      // Products ko grid mein show karo
+      displayProducts(allProducts);
+      
+    } catch (error) {
+      console.error('Error fetching products:', error);
+      productsGrid.innerHTML = '<p class="error">Error loading products. Please refresh.</p>';
+    }
+  }
+  
+  // 📦 Step 3.2: Products ko grid mein display karo
+  function displayProducts(products) {
+    const productsGrid = document.querySelector('.products-grid');
+    
+    if (products.length === 0) {
+      productsGrid.innerHTML = '<p>No products found.</p>';
+      return;
+    }
+    
+    let html = '';
+    products.forEach(product => {
+      // Pehli image aur price lo
+      const image = product.images && product.images.length > 0 
+        ? product.images[0] 
+        : 'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png';
+      
+      const price = product.variants && product.variants.length > 0
+        ? (product.variants[0].price / 100).toFixed(2)
+        : '0.00';
+      
+      html += `
+        <div class="product-card" data-product-id="${product.id}">
+          <img src="${image}" alt="${product.title}" loading="lazy">
+          <h4>${product.title}</h4>
+          <p class="product-price">$${price}</p>
+          <button class="add-product-btn" 
+                  data-product-id="${product.id}"
+                  data-product-title="${product.title}"
+                  data-product-price="${price}"
+                  data-product-image="${image}">
+            Add to Bundle
+          </button>
+        </div>
+      `;
+    });
+    
+    productsGrid.innerHTML = html;
+    
+    // Add to cart buttons par event listeners lagao
+    document.querySelectorAll('.add-product-btn').forEach(btn => {
+      btn.addEventListener('click', addProductToBundle);
+    });
+  }
+  
+  // ➕ Step 3.3: Product ko bundle mein add karo
+  function addProductToBundle(event) {
+    const btn = event.target;
+    
+    // Check karo basket selected hai ya nahi
+    if (!selectedBasket) {
+      alert('Please select a basket first!');
+      // Step 1 par le jao
+      currentStep = 1;
+      showStep(1);
+      return;
+    }
+    
+    const maxProducts = parseInt(selectedBasket.dataset.max);
+    
+    if (selectedProducts.length >= maxProducts) {
+      alert(`Maximum ${maxProducts} products allowed in this basket!`);
+      return;
+    }
+    
+    const product = {
+      id: btn.dataset.productId,
+      title: btn.dataset.productTitle,
+      price: btn.dataset.productPrice,
+      image: btn.dataset.productImage
+    };
+    
+    selectedProducts.push(product);
+    
+    // Button ko disable karo
+    btn.disabled = true;
+    btn.textContent = 'Added ✓';
+    
+    // Selected count update karo
+    updateSelectedCount();
+    
+    console.log('Products selected:', selectedProducts);
+  }
+  
+  // 🔢 Step 3.4: Selected products count update karo
+  function updateSelectedCount() {
+    const countSpan = document.querySelector('.selected-count');
+    if (countSpan) {
+      countSpan.textContent = selectedProducts.length;
+    }
+    
+    // Min products check karo
+    if (selectedBasket) {
+      const minProducts = parseInt(selectedBasket.dataset.min);
+      if (selectedProducts.length >= minProducts) {
+        // Next button enable karo
+        nextBtn.disabled = false;
+      } else {
+        nextBtn.disabled = true;
+      }
+    }
+  }
+  
+  // 👁️ Step 3.5: Preview update karo
+  function updatePreview() {
+    if (!selectedBasket) return;
+    
+    const previewSection = document.querySelector('.selected-items');
+    const totalSpan = document.querySelector('.total-amount');
+    
+    // Clear preview
+    previewSection.innerHTML = '';
+    
+    // Basket info
+    const basketDiv = document.createElement('div');
+    basketDiv.className = 'preview-basket';
+    basketDiv.innerHTML = `
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #e1e3e5;">
+        <strong style="font-size: 18px;">${selectedBasket.querySelector('h4').textContent}</strong>
+        <span style="font-size: 18px; color: #008060;">$${selectedBasket.dataset.price}</span>
+      </div>
+    `;
+    previewSection.appendChild(basketDiv);
+    
+    // Selected products
+    if (selectedProducts.length > 0) {
+      const productsDiv = document.createElement('div');
+      productsDiv.className = 'preview-products';
+      productsDiv.innerHTML = '<h4 style="margin-bottom: 10px;">Selected Products:</h4>';
+      
+      selectedProducts.forEach((product, index) => {
+        const productDiv = document.createElement('div');
+        productDiv.className = 'preview-product';
+        productDiv.style.cssText = 'display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #e1e3e5;';
+        productDiv.innerHTML = `
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <img src="${product.image}" alt="${product.title}" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px;">
+            <span>${product.title}</span>
+          </div>
+          <span>$${product.price}</span>
+        `;
+        productsDiv.appendChild(productDiv);
+      });
+      
+      previewSection.appendChild(productsDiv);
+    }
+    
+    // Calculate total
+    const basketPrice = parseFloat(selectedBasket.dataset.price);
+    const productsTotal = selectedProducts.reduce((sum, p) => sum + parseFloat(p.price), 0);
+    const total = basketPrice + productsTotal;
+    totalSpan.textContent = total.toFixed(2);
+  }
+  
+  // 🎯 Step 3.6: Show step function (update karo)
+  function showStep(step) {
+    steps.forEach(s => {
+      s.style.display = s.dataset.step == step ? 'block' : 'none';
+    });
+    
+    // Update buttons
+    prevBtn.style.display = step === 1 ? 'none' : 'inline-block';
+    
+    if (step === 2) {
+      // Jab step 2 khule, products fetch karo
+      fetchProducts();
+      nextBtn.disabled = selectedProducts.length < (selectedBasket ? parseInt(selectedBasket.dataset.min) : 0);
+    }
+    
+    if (step === 3) {
+      nextBtn.style.display = 'none';
+      addToCartBtn.style.display = 'inline-block';
+      updatePreview();
+    } else {
+      nextBtn.style.display = 'inline-block';
+      addToCartBtn.style.display = 'none';
+    }
+  }
+  
+  // Basket selection (update karo)
+  document.querySelectorAll('.basket-option').forEach(option => {
+    option.addEventListener('click', function() {
+      document.querySelectorAll('.basket-option').forEach(o => o.classList.remove('selected'));
+      this.classList.add('selected');
+      selectedBasket = this;
+      
+      // Selected products reset karo
+      selectedProducts = [];
+      updateSelectedCount();
+      
+      // Agar step 2 mein ho to products reload karo
+      if (currentStep === 2) {
+        fetchProducts();
+      }
+    });
+  });
+  
+  // Next button click
+  nextBtn.addEventListener('click', function() {
+    if (currentStep === 1 && !selectedBasket) {
+      alert('Please select a basket first!');
+      return;
+    }
+    
+    if (currentStep === 2) {
+      const minProducts = selectedBasket ? parseInt(selectedBasket.dataset.min) : 0;
+      if (selectedProducts.length < minProducts) {
+        alert(`Please select at least ${minProducts} products!`);
+        return;
+      }
+    }
+    
+    if (currentStep < 3) {
+      currentStep++;
+      showStep(currentStep);
+    }
+  });
+  
+  // Previous button click
+  prevBtn.addEventListener('click', function() {
+    if (currentStep > 1) {
+      currentStep--;
+      showStep(currentStep);
+    }
+  });
+  
+  // Add to cart
+  addToCartBtn.addEventListener('click', function() {
+    const note = document.getElementById('bundle-note')?.value || '';
+    
+    console.log('🎁 Bundle Details:', {
+      basket: {
+        name: selectedBasket.querySelector('h4').textContent,
+        price: selectedBasket.dataset.price,
+        min: selectedBasket.dataset.min,
+        max: selectedBasket.dataset.max
+      },
+      products: selectedProducts,
+      note: note,
+      total: document.querySelector('.total-amount')?.textContent
+    });
+    
+    alert('✅ Bundle ready to add to cart! (Check console for details)');
+    
+    // 🎉 Celebration message
+    alert(`Bundle Created Successfully! 
+    
+Basket: ${selectedBasket.querySelector('h4').textContent}
+Products: ${selectedProducts.length} items
+Total: $${document.querySelector('.total-amount')?.textContent}
+Note: ${note || 'No note added'}`);
+  });
+  
+  // Initialize - Step 1 show karo
+  showStep(1);
+});
+</script>
+
+{% schema %}
+{
+  "name": "BYOB - Bundle Builder",
+  "target": "section",
+  "settings": [
+    {
+      "type": "color",
+      "id": "primary_color",
+      "label": "Primary Color",
+      "default": "#008060"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#202223"
+    },
+    {
+      "type": "text",
+      "id": "small_basket_name",
+      "label": "Small Basket Name",
+      "default": "Small Basket"
+    },
+    {
+      "type": "number",
+      "id": "small_basket_min",
+      "label": "Small Basket Min Products",
+      "default": 1
+    },
+    {
+      "type": "number",
+      "id": "small_basket_max",
+      "label": "Small Basket Max Products",
+      "default": 3
+    },
+    {
+      "type": "text",
+      "id": "small_basket_price",
+      "label": "Small Basket Price",
+      "default": "29.99"
+    },
+    {
+      "type": "text",
+      "id": "large_basket_name",
+      "label": "Large Basket Name",
+      "default": "Large Basket"
+    },
+    {
+      "type": "number",
+      "id": "large_basket_min",
+      "label": "Large Basket Min Products",
+      "default": 4
+    },
+    {
+      "type": "number",
+      "id": "large_basket_max",
+      "label": "Large Basket Max Products",
+      "default": 6
+    },
+    {
+      "type": "text",
+      "id": "large_basket_price",
+      "label": "Large Basket Price",
+      "default": "49.99"
+    },
+    {
+      "type": "text",
+      "id": "extra_large_basket_name",
+      "label": "Extra Large Basket Name",
+      "default": "Extra Large Basket"
+    },
+    {
+      "type": "number",
+      "id": "extra_large_basket_min",
+      "label": "Extra Large Basket Min Products",
+      "default": 7
+    },
+    {
+      "type": "number",
+      "id": "extra_large_basket_max",
+      "label": "Extra Large Basket Max Products",
+      "default": 10
+    },
+    {
+      "type": "text",
+      "id": "extra_large_basket_price",
+      "label": "Extra Large Basket Price",
+      "default": "79.99"
+    }
+  ]
+}
+{% endschema %}
